@@ -1,0 +1,109 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+   <script src="codebase/dhtmlxgantt.js"></script>
+   <script src="codebase/dhtmlxgantt.js"></script>
+   <script src="samples/08_api/01_dnd_events.html"></script>
+   <script src="../codebase/dhtmlxgantt.js"></script>
+   <link rel="stylesheet" href="../codebase/dhtmlxgantt.css">
+ 
+   <script src="../codebase/locale/locale.js" charset="utf-8"></script>
+   <link href="codebase/dhtmlxgantt.css" rel="stylesheet">
+   <link href="codebase/sources/locale/locale.js">
+   <style type="text/css" media="screen">
+    html, body{
+        margin:0px;
+        padding:0px;
+        height:100%;
+        overflow:hidden;
+    }
+
+</style>
+</head>
+<body>
+    <div id="gantt_here" style='width:1000px; height:400px;'></div>
+    <script type="text/javascript">
+        gantt.config.scale_unit = "month";
+        gantt.config.step = 3;
+        gantt.config.date_scale = "%Y";
+        gantt.templates.task_text=function(start,end,task){
+        return "<b>Text:</b> "+task.text+",<b> Holders:</b> "+task.users;
+    };
+        
+        gantt.attachEvent("onTaskClick", function(id, e) {
+        alert("You've just clicked an item with id="+id);
+    });
+        gantt.attachEvent("onTaskDblClick", function(id, e) {
+        alert("You've just double clicked an item with id="+id);
+   });
+    
+    gantt.attachEvent("onBeforeTaskChanged", function(id, mode, old_task){
+    var task = gantt.getTask(id);
+    if(mode == gantt.config.drag_mode.progress){
+        if(task.progress < old_task.progress){
+            dhtmlx.message(task.text + " progress can't be undone!");
+            return false; 
+        }
+    }
+    return true;
+});
+    gantt.attachEvent("onTaskClick", function(id, e){
+    parentId = this.getTask(id).parent;
+});
+
+    gantt.locale = {
+    date: {
+        month_full: ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"],
+        month_short: ["Jan", "Fév", "Mar", "Avr", "Mai", "Juin", "Juil", "Aôu", "Sep", "Oct", "Nov", "Déc"],
+        day_full: ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"],
+        day_short: ["Dim", "Lun", "Mar", "Mer", "Jeu", "Ven", "Sam"]
+    },
+    labels:{
+        new_task:"Tâche neuve",
+        icon_save:"Enregistrer",
+        icon_cancel:"Annuler",
+        icon_details:"Détails",
+        icon_edit:"Modifier",
+        icon_delete:"Effacer",
+        confirm_closing:"",//Vos modifications seront perdus, êtes-vous sûr ?
+        confirm_deleting:"L'événement sera effacé sans appel, êtes-vous sûr ?",
+ 
+        section_description:"Description",
+        section_time:"Période",
+        section_type:"Type",
+ 
+        /* grid columns */
+ 
+        column_text :  "Tâche neuve",
+        column_start_date : "Date initiale",
+        column_duration : "Durée",
+        column_add : "",
+ 
+ 
+        /* link confirmation */
+ 
+        confirm_link_deleting:"seront supprimées",
+        link_start: "(début)",
+        link_end: "(fin)",
+ 
+        type_task: "Task",
+        type_project: "Project",
+        type_milestone: "Milestone",
+ 
+ 
+        minutes: "Minutes",
+        hours: "Heures",
+        days: "Jours",
+        weeks: "Semaine",
+        months: "Mois",
+        years: "Années"
+    }
+};
+    gantt.init("gantt_here");
+    gantt.detachAllEvents();
+    </script>
+<!--bower install gantt-->
+</body>
+</html>
